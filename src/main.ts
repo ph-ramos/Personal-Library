@@ -18,6 +18,10 @@ export default class ColecaoPlugin extends Plugin {
 			new ModalBusca(this.app, this.settings).open();
 		});
 
+		this.addRibbonIcon("star", t(idioma, "comandoAtualizarStatusNome"), () => {
+			abrirModalStatusLeitura(this.app, this.settings, this.app.workspace.getActiveFile());
+		});
+
 		this.addCommand({
 			id: "adicionar-item-colecao",
 			name: t(idioma, "comandoAdicionarNome"),
@@ -54,7 +58,28 @@ export default class ColecaoPlugin extends Plugin {
 			})
 		);
 
+		this.registerEvent(
+			this.app.workspace.on("editor-menu", (menu, _editor, info) => {
+				const file = info.file;
+				if (!(file instanceof TFile) || file.extension !== "md") return;
+				menu.addItem((item) =>
+					item
+						.setTitle(t(this.settings.idioma, "comandoAtualizarStatusNome"))
+						.setIcon("book-check")
+						.onClick(() => abrirModalStatusLeitura(this.app, this.settings, file))
+				);
+			})
+		);
+
 		this.addSettingTab(new ColecaoSettingTab(this.app, this));
+
+		// Garante a visão geral (.base) já na primeira ativação do plugin,
+		// sem precisar que o usuário rode o comando manualmente.
+		this.app.workspace.onLayoutReady(() => {
+			void garantirArquivoBase(this.app, obterPastaColecao(this.settings), this.settings.idioma).catch((e) =>
+				console.error("[Colecao] Erro ao criar visão geral padrão:", e)
+			);
+		});
 	}
 
 	async loadSettings() {

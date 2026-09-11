@@ -108,16 +108,8 @@ export class ModalStatusLeitura extends Modal {
 			});
 		});
 
-		new Setting(contentEl).setName(t(idioma, "statusModalCampoNota")).addDropdown((dd) => {
-			dd.addOption("", t(idioma, "statusModalOpcaoSemNota"));
-			for (let n = 1; n <= 5; n += 0.5) {
-				dd.addOption(String(n), String(n));
-			}
-			dd.setValue(this.nota !== undefined ? String(this.nota) : "");
-			dd.onChange((v) => {
-				this.nota = v === "" ? undefined : Number(v);
-			});
-		});
+		const notaSetting = new Setting(contentEl).setName(t(idioma, "statusModalCampoNota"));
+		this.renderEstrelas(notaSetting.controlEl.createDiv({ cls: "colecao-estrelas" }));
 
 		new Setting(contentEl).setName(t(idioma, "statusModalCampoFavorito")).addToggle((tg) =>
 			tg.setValue(this.favorito).onChange((v) => {
@@ -131,6 +123,56 @@ export class ModalStatusLeitura extends Modal {
 				.setCta()
 				.onClick(() => void this.salvar())
 		);
+	}
+
+	/**
+	 * Desenha (ou redesenha) os 5 ícones de estrela dentro de `container`.
+	 * Cada estrela tem duas metades clicáveis (esquerda = meia nota, direita
+	 * = nota cheia), permitindo notas de 0.5 em 0.5 de 1 a 5. O preenchimento
+	 * visual é feito sobrepondo uma estrela cheia recortada (clip-path) por
+	 * cima de uma estrela vazia.
+	 */
+	private renderEstrelas(container: HTMLElement): void {
+		container.empty();
+		const idioma = this.idioma;
+
+		for (let posicao = 1; posicao <= 5; posicao++) {
+			const estrela = container.createDiv({ cls: "colecao-estrela" });
+			estrela.createSpan({ cls: "colecao-estrela-fundo", text: "★" });
+			const frente = estrela.createSpan({ cls: "colecao-estrela-frente", text: "★" });
+			const preenchimento = this.percentualPreenchido(posicao);
+			frente.style.clipPath = `inset(0 ${100 - preenchimento}% 0 0)`;
+
+			const hitEsquerda = estrela.createDiv({ cls: "colecao-estrela-hit colecao-estrela-hit-esquerda" });
+			hitEsquerda.addEventListener("click", () => this.definirNota(posicao - 0.5, container));
+			const hitDireita = estrela.createDiv({ cls: "colecao-estrela-hit colecao-estrela-hit-direita" });
+			hitDireita.addEventListener("click", () => this.definirNota(posicao, container));
+		}
+
+		container.createSpan({
+			cls: "colecao-estrelas-valor",
+			text: this.nota !== undefined ? String(this.nota) : t(idioma, "statusModalOpcaoSemNota"),
+		});
+
+		const limpar = container.createEl("button", {
+			cls: "colecao-estrelas-limpar",
+			text: t(idioma, "statusModalOpcaoSemNota"),
+		});
+		limpar.type = "button";
+		limpar.addEventListener("click", () => this.definirNota(undefined, container));
+	}
+
+	private percentualPreenchido(posicao: number): number {
+		if (this.nota === undefined) return 0;
+		const diferenca = this.nota - (posicao - 1);
+		if (diferenca >= 1) return 100;
+		if (diferenca <= 0) return 0;
+		return diferenca * 100;
+	}
+
+	private definirNota(valor: number | undefined, container: HTMLElement): void {
+		this.nota = valor;
+		this.renderEstrelas(container);
 	}
 
 	private async salvar(): Promise<void> {

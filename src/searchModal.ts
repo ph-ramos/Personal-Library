@@ -3,7 +3,7 @@ import { buscarMetadados, pareceQuadrinho, ResultadoBusca } from "./metadataServ
 import { ItemColecao, ColecaoSettings, TipoItem } from "./types";
 import { registrarItem } from "./registrar";
 import { ModalCadastroManual } from "./manualEntryModal";
-import { ModalScanner } from "./barcodeScanner";
+import { abrirScannerComPermissao } from "./barcodeScanner";
 import { t } from "./i18n";
 
 export class ModalBusca extends Modal {
@@ -77,11 +77,11 @@ export class ModalBusca extends Modal {
 	}
 
 	private abrirScanner(): void {
-		new ModalScanner(this.app, this.idioma, (codigo) => {
+		void abrirScannerComPermissao(this.app, this.idioma, (codigo) => {
 			this.termo = codigo;
 			this.inputTexto?.setValue(codigo);
 			void this.buscar();
-		}).open();
+		});
 	}
 
 	private async buscar() {

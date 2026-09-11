@@ -62,3 +62,69 @@
 .colecao-modal-status .setting-item {
 	border-top: none;
 }
+
+.colecao-estrelas {
+	display: flex;
+	align-items: center;
+	gap: 0.3em;
+	flex-wrap: wrap;
+}
+
+.colecao-estrela {
+	position: relative;
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+	font-size: 1.4em;
+	line-height: 1;
+}
+
+.colecao-estrela-fundo,
+.colecao-estrela-frente {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	user-select: none;
+}
+
+.colecao-estrela-fundo {
+	color: var(--background-modifier-border);
+}
+
+.colecao-estrela-frente {
+	color: #f5a623;
+	overflow: hidden;
+}
+
+.colecao-estrela-hit {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 50%;
+	cursor: pointer;
+}
+
+.colecao-estrela-hit-esquerda {
+	left: 0;
+}
+
+.colecao-estrela-hit-direita {
+	right: 0;
+}
+
+.colecao-estrelas-valor {
+	font-size: 0.85em;
+	color: var(--text-muted);
+	margin-left: 0.3em;
+	min-width: 4.5em;
+}
+
+.colecao-estrelas-limpar {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0 0 0 0.5em;
+	text-decoration: underline;
+}

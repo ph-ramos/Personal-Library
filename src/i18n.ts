@@ -103,7 +103,8 @@ type ChaveTraducao =
 	| "statusModalBotaoSalvar"
 	| "statusModalSemArquivo"
 	| "statusModalSucesso"
-	| "baseViewGeral";
+	| "baseViewGeral"
+	| "scannerPermissaoNegada";
 
 const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 	pt: {
@@ -210,6 +211,7 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		statusModalSemArquivo: "Abra a nota de um livro ou quadrinho da coleção primeiro.",
 		statusModalSucesso: "Status atualizado.",
 		baseViewGeral: "Visão geral",
+		scannerPermissaoNegada: "O acesso à câmera está bloqueado. Habilite a permissão de câmera para o Obsidian nas configurações do sistema/navegador e tente de novo.",
 	},
 	en: {
 		ribbonTooltip: "Add to collection",
@@ -315,6 +317,7 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		statusModalSemArquivo: "Open a book or comic note from the collection first.",
 		statusModalSucesso: "Status updated.",
 		baseViewGeral: "Overview",
+		scannerPermissaoNegada: "Camera access is blocked. Enable camera permission for Obsidian in your system/browser settings and try again.",
 	},
 	zh: {
 		ribbonTooltip: "添加到收藏",
@@ -420,6 +423,7 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		statusModalSemArquivo: "请先打开收藏中的一本书或漫画的笔记。",
 		statusModalSucesso: "状态已更新。",
 		baseViewGeral: "总览",
+		scannerPermissaoNegada: "摄像头访问被禁止。请在系统/浏览器设置中为 Obsidian 启用摄像头权限,然后重试。",
 	},
 };
 
