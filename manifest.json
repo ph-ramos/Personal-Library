@@ -1,0 +1,9 @@
+{
+  "id": "colecao-livros-quadrinhos",
+  "name": "Coleção de Livros e Quadrinhos",
+  "version": "0.1.0",
+  "minAppVersion": "1.9.0",
+  "description": "Cataloga livros e quadrinhos por ISBN/título, baixando metadados e capa, com anotações por item e visão geral via Bases.",
+  "author": "Pedro Henrique",
+  "isDesktopOnly": false
+}

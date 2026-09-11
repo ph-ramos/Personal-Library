@@ -1,0 +1,47 @@
+.colecao-modal-busca .colecao-resultados {
+	margin-top: 1em;
+	max-height: 50vh;
+	overflow-y: auto;
+}
+
+.colecao-item-resultado {
+	display: flex;
+	gap: 0.75em;
+	padding: 0.5em 0;
+	border-bottom: 1px solid var(--background-modifier-border);
+	align-items: center;
+}
+
+.colecao-capa-thumb {
+	width: 48px;
+	height: 64px;
+	object-fit: cover;
+	border-radius: 4px;
+	flex-shrink: 0;
+	background: var(--background-secondary);
+}
+
+.colecao-info-resultado {
+	flex: 1;
+	min-width: 0;
+}
+
+.colecao-titulo-resultado {
+	font-weight: 600;
+}
+
+.colecao-detalhes-resultado,
+.colecao-fonte-resultado {
+	font-size: 0.85em;
+	color: var(--text-muted);
+}
+
+.colecao-acoes-resultado .setting-item {
+	border: none;
+	padding: 0;
+}
+
+.colecao-sem-resultado {
+	text-align: center;
+	padding: 1em 0;
+}
