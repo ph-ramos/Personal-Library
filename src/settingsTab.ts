@@ -12,7 +12,7 @@ export class ColecaoSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		const idioma = this.plugin.settings.idioma;
 		containerEl.empty();
-		containerEl.createEl("h2", { text: t(idioma, "configTitulo") });
+		new Setting(containerEl).setName(t(idioma, "configTitulo")).setHeading();
 
 		new Setting(containerEl)
 			.setName(t(idioma, "configPastaColecaoNome"))

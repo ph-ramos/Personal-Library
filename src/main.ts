@@ -39,7 +39,8 @@ export default class ColecaoPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, CONFIGURACOES_PADRAO, await this.loadData());
+		const dadosSalvos = (await this.loadData()) as Partial<ColecaoSettings> | null;
+		this.settings = Object.assign({}, CONFIGURACOES_PADRAO, dadosSalvos ?? {});
 	}
 
 	async saveSettings() {

@@ -24,8 +24,9 @@ export async function registrarItem(app: App, settings: ColecaoSettings, item: I
 		const nota = await criarNotaItem(app, item, pastaColecao, nomeArquivo, idioma, caminhoCapa);
 		new Notice(`"${item.titulo}" ${t(idioma, "noticeAdicionado")}`);
 		await app.workspace.getLeaf(false).openFile(nota);
-	} catch (e: any) {
-		new Notice(`${t(idioma, "noticeErroItem")} ${e?.message ?? e}`);
+	} catch (e: unknown) {
+		const mensagem = e instanceof Error ? e.message : String(e);
+		new Notice(`${t(idioma, "noticeErroItem")} ${mensagem}`);
 		throw e;
 	}
 }

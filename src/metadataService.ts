@@ -17,6 +17,87 @@ export interface ResultadoBusca {
 	fonteUrl?: string;
 }
 
+interface GoogleBooksIndustryIdentifier {
+	type?: string;
+	identifier?: string;
+}
+
+interface GoogleBooksImageLinks {
+	thumbnail?: string;
+	smallThumbnail?: string;
+}
+
+interface GoogleBooksVolumeInfo {
+	title?: string;
+	authors?: string[];
+	publisher?: string;
+	publishedDate?: string;
+	pageCount?: number;
+	language?: string;
+	description?: string;
+	categories?: string[];
+	industryIdentifiers?: GoogleBooksIndustryIdentifier[];
+	imageLinks?: GoogleBooksImageLinks;
+	infoLink?: string;
+	canonicalVolumeLink?: string;
+}
+
+interface GoogleBooksVolume {
+	volumeInfo?: GoogleBooksVolumeInfo;
+}
+
+interface GoogleBooksResponse {
+	items?: GoogleBooksVolume[];
+}
+
+interface OpenLibraryAuthor {
+	name?: string;
+}
+
+interface OpenLibrarySubject {
+	name?: string;
+}
+
+interface OpenLibraryPublisher {
+	name?: string;
+}
+
+interface OpenLibraryCover {
+	small?: string;
+	medium?: string;
+	large?: string;
+}
+
+interface OpenLibraryBookData {
+	title?: string;
+	authors?: OpenLibraryAuthor[];
+	publishers?: OpenLibraryPublisher[];
+	publish_date?: string;
+	number_of_pages?: number;
+	subjects?: OpenLibrarySubject[];
+	cover?: OpenLibraryCover;
+	url?: string;
+}
+
+type OpenLibraryBooksResponse = Record<string, OpenLibraryBookData | undefined>;
+
+interface OpenLibrarySearchDoc {
+	title?: string;
+	author_name?: string[];
+	publisher?: string[];
+	first_publish_year?: number;
+	number_of_pages_median?: number;
+	language?: string[];
+	subject?: string[];
+	isbn?: string[];
+	cover_i?: number;
+	key?: string;
+}
+
+interface OpenLibrarySearchResponse {
+	docs?: OpenLibrarySearchDoc[];
+}
+
 function limparIsbn(isbn: string): string {
 	return isbn.replace(/[^0-9Xx]/g, "").toUpperCase();
 }
@@ -37,10 +118,11 @@ async function buscarGoogleBooks(termo: string, apiKey?: string): Promise<Result
 	const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}${apiKey ? `&key=${apiKey}` : ""}`;
 	try {
 		const res = await requestUrl({ url, throw: false });
-		if (res.status !== 200 || !res.json?.items) return [];
-		return res.json.items.slice(0, 10).map((item: any): ResultadoBusca => {
+		const dados = res.json as GoogleBooksResponse | undefined;
+		if (res.status !== 200 || !dados?.items) return [];
+		return dados.items.slice(0, 10).map((item): ResultadoBusca => {
 			const info = item.volumeInfo ?? {};
-			const ids: any[] = info.industryIdentifiers ?? [];
+			const ids = info.industryIdentifiers ?? [];
 			const isbn10 = ids.find((i) => i.type === "ISBN_10")?.identifier;
 			const isbn13 = ids.find((i) => i.type === "ISBN_13")?.identifier;
 			const capa = info.imageLinks?.thumbnail ?? info.imageLinks?.smallThumbnail;
@@ -73,15 +155,16 @@ async function buscarOpenLibraryPorIsbn(termo: string): Promise<ResultadoBusca[]
 		const url = `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`;
 		const res = await requestUrl({ url, throw: false });
 		if (res.status !== 200) return [];
-		const data = res.json?.[`ISBN:${isbn}`];
+		const resposta = res.json as OpenLibraryBooksResponse | undefined;
+		const data = resposta?.[`ISBN:${isbn}`];
 		if (!data) return [];
 		return [{
 			titulo: data.title ?? "Sem título",
-			autores: (data.authors ?? []).map((a: any) => a.name).filter(Boolean),
+			autores: (data.authors ?? []).map((a) => a.name).filter((n): n is string => Boolean(n)),
 			editora: data.publishers?.[0]?.name,
 			anoPublicacao: data.publish_date,
 			paginas: data.number_of_pages,
-			categorias: (data.subjects ?? []).map((s: any) => s.name),
+			categorias: (data.subjects ?? []).map((s) => s.name).filter((n): n is string => Boolean(n)),
 			isbn10: isbn.length === 10 ? isbn : undefined,
 			isbn13: isbn.length === 13 ? isbn : undefined,
 			capaUrl: data.cover?.large ?? data.cover?.medium ?? data.cover?.small,
@@ -98,8 +181,9 @@ async function buscarOpenLibraryPorTitulo(termo: string): Promise<ResultadoBusca
 	try {
 		const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(termo)}&limit=10`;
 		const res = await requestUrl({ url, throw: false });
-		if (res.status !== 200 || !res.json?.docs) return [];
-		return res.json.docs.slice(0, 10).map((doc: any): ResultadoBusca => ({
+		const resposta = res.json as OpenLibrarySearchResponse | undefined;
+		if (res.status !== 200 || !resposta?.docs) return [];
+		return resposta.docs.slice(0, 10).map((doc): ResultadoBusca => ({
 			titulo: doc.title ?? "Sem título",
 			autores: doc.author_name ?? [],
 			editora: doc.publisher?.[0],
@@ -107,8 +191,8 @@ async function buscarOpenLibraryPorTitulo(termo: string): Promise<ResultadoBusca
 			paginas: doc.number_of_pages_median,
 			idioma: doc.language?.[0],
 			categorias: doc.subject?.slice(0, 8),
-			isbn10: doc.isbn?.find((i: string) => i.length === 10),
-			isbn13: doc.isbn?.find((i: string) => i.length === 13),
+			isbn10: doc.isbn?.find((i) => i.length === 10),
+			isbn13: doc.isbn?.find((i) => i.length === 13),
 			capaUrl: doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : undefined,
 			fonte: "Open Library",
 			fonteUrl: doc.key ? `https://openlibrary.org${doc.key}` : undefined,

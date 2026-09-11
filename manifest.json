@@ -1,9 +1,9 @@
 {
-  "id": "colecao-livros-quadrinhos",
-  "name": "Books and Comics Tracker",
-  "version": "0.1.1",
-  "minAppVersion": "1.9.0",
-  "description": "Cataloga livros e quadrinhos por ISBN/título, baixando metadados e capa, com anotações por item e visão geral via Bases.",
-  "author": "Pedro Henrique",
-  "isDesktopOnly": false
+	"id": "colecao-livros-quadrinhos",
+	"name": "Books and Comics Tracker",
+	"version": "0.1.2",
+	"minAppVersion": "1.9.0",
+	"description": "Cataloga livros e quadrinhos por ISBN/título, baixando metadados e capa, com anotações por item e visão geral via Bases.",
+	"author": "Pedro Henrique",
+	"isDesktopOnly": false
 }

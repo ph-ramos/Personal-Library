@@ -59,7 +59,7 @@ export class ModalBusca extends Modal {
 				text.setPlaceholder(t(idioma, "buscaCampoPlaceholder"));
 				text.onChange((v) => (this.termo = v));
 				text.inputEl.addEventListener("keydown", (e: KeyboardEvent) => {
-					if (e.key === "Enter") this.buscar();
+					if (e.key === "Enter") void this.buscar();
 				});
 			})
 			.addButton((btn) => btn.setButtonText(t(idioma, "buscaBotao")).setCta().onClick(() => this.buscar()));
@@ -120,8 +120,7 @@ export class ModalBusca extends Modal {
 		for (const resultado of this.resultados) {
 			const linha = this.areaResultados.createDiv({ cls: "colecao-item-resultado" });
 			if (resultado.capaUrl) {
-				const img = linha.createEl("img", { cls: "colecao-capa-thumb" });
-				img.src = resultado.capaUrl;
+				linha.createEl("img", { cls: "colecao-capa-thumb", attr: { src: resultado.capaUrl } });
 			} else {
 				linha.createDiv({ cls: "colecao-capa-thumb colecao-capa-vazia" });
 			}

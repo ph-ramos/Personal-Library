@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v4
 
@@ -21,6 +23,13 @@ jobs:
         run: |
           npm install
           npm run build
+
+      - name: Gerar attestation de proveniência dos artefatos
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            main.js
+            styles.css
 
       - name: Criar release e anexar os arquivos do plugin
         env:
