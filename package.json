@@ -1,6 +1,6 @@
 {
   "name": "colecao-livros-quadrinhos",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Plugin Obsidian para catalogar livros e quadrinhos por ISBN/título, com metadados, capa e visão geral via Bases.",
   "main": "main.js",
