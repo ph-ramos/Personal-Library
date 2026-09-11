@@ -3,6 +3,7 @@ import { buscarMetadados, pareceQuadrinho, ResultadoBusca } from "./metadataServ
 import { ItemColecao, ColecaoSettings, TipoItem } from "./types";
 import { registrarItem } from "./registrar";
 import { ModalCadastroManual } from "./manualEntryModal";
+import { ModalScanner } from "./barcodeScanner";
 import { t } from "./i18n";
 
 export class ModalBusca extends Modal {
@@ -13,6 +14,7 @@ export class ModalBusca extends Modal {
 	private buscando = false;
 	private areaResultados!: HTMLElement;
 	private dropdownTipo?: DropdownComponent;
+	private inputTexto?: TextComponent;
 
 	constructor(app: App, private settings: ColecaoSettings) {
 		super(app);
@@ -51,22 +53,35 @@ export class ModalBusca extends Modal {
 					});
 			});
 
-		let inputTexto: TextComponent | undefined;
 		new Setting(contentEl)
 			.setName(t(idioma, "buscaCampoNome"))
 			.addText((text) => {
-				inputTexto = text;
+				this.inputTexto = text;
 				text.setPlaceholder(t(idioma, "buscaCampoPlaceholder"));
 				text.onChange((v) => (this.termo = v));
 				text.inputEl.addEventListener("keydown", (e: KeyboardEvent) => {
 					if (e.key === "Enter") void this.buscar();
 				});
 			})
+			.addExtraButton((btn) =>
+				btn
+					.setIcon("camera")
+					.setTooltip(t(idioma, "scannerTitulo"))
+					.onClick(() => this.abrirScanner())
+			)
 			.addButton((btn) => btn.setButtonText(t(idioma, "buscaBotao")).setCta().onClick(() => this.buscar()));
 
 		this.areaResultados = contentEl.createDiv({ cls: "colecao-resultados" });
 
-		window.setTimeout(() => inputTexto?.inputEl.focus(), 0);
+		window.setTimeout(() => this.inputTexto?.inputEl.focus(), 0);
+	}
+
+	private abrirScanner(): void {
+		new ModalScanner(this.app, this.idioma, (codigo) => {
+			this.termo = codigo;
+			this.inputTexto?.setValue(codigo);
+			void this.buscar();
+		}).open();
 	}
 
 	private async buscar() {

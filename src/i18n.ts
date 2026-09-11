@@ -78,7 +78,11 @@ type ChaveTraducao =
 	| "propSerie"
 	| "propNumeroEdicao"
 	| "pastaColecaoPadrao"
-	| "pastaCapasSubpasta";
+	| "pastaCapasSubpasta"
+	| "scannerTitulo"
+	| "scannerInstrucao"
+	| "scannerErroCamera"
+	| "scannerSemCamera";
 
 const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 	pt: {
@@ -160,6 +164,10 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propNumeroEdicao: "Numero_edicao",
 		pastaColecaoPadrao: "Colecao",
 		pastaCapasSubpasta: "_Capas",
+		scannerTitulo: "Escanear código de barras",
+		scannerInstrucao: "Aponte a câmera para o código de barras (ISBN) do livro ou quadrinho.",
+		scannerErroCamera: "Não foi possível acessar a câmera. Verifique as permissões do dispositivo.",
+		scannerSemCamera: "Nenhuma câmera foi encontrada neste dispositivo.",
 	},
 	en: {
 		ribbonTooltip: "Add to collection",
@@ -240,6 +248,10 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propNumeroEdicao: "Issue_number",
 		pastaColecaoPadrao: "Collection",
 		pastaCapasSubpasta: "_Covers",
+		scannerTitulo: "Scan barcode",
+		scannerInstrucao: "Point the camera at the book/comic's barcode (ISBN).",
+		scannerErroCamera: "Couldn't access the camera. Check your device's permissions.",
+		scannerSemCamera: "No camera was found on this device.",
 	},
 	zh: {
 		ribbonTooltip: "添加到收藏",
@@ -320,6 +332,10 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propNumeroEdicao: "期号",
 		pastaColecaoPadrao: "收藏",
 		pastaCapasSubpasta: "_封面",
+		scannerTitulo: "扫描条形码",
+		scannerInstrucao: "将摄像头对准书籍/漫画的条形码(ISBN)。",
+		scannerErroCamera: "无法访问摄像头。请检查设备权限。",
+		scannerSemCamera: "此设备未找到摄像头。",
 	},
 };
 

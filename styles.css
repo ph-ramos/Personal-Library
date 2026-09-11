@@ -45,3 +45,16 @@
 	text-align: center;
 	padding: 1em 0;
 }
+
+.colecao-modal-scanner .colecao-scanner-instrucao {
+	color: var(--text-muted);
+	margin-bottom: 0.75em;
+}
+
+.colecao-scanner-video {
+	width: 100%;
+	max-height: 60vh;
+	border-radius: 6px;
+	background: #000;
+	display: block;
+}
