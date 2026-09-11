@@ -36,6 +36,8 @@ export interface Quadrinho extends ItemBase {
 
 export type ItemColecao = Livro | Quadrinho;
 
+export type StatusLeitura = "naoLi" | "queroLer" | "lendo" | "jaLi" | "relendo";
+
 export interface ColecaoSettings {
 	pastaColecao: string;
 	pastaCapas: string;

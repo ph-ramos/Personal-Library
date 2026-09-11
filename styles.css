@@ -58,3 +58,7 @@
 	background: #000;
 	display: block;
 }
+
+.colecao-modal-status .setting-item {
+	border-top: none;
+}

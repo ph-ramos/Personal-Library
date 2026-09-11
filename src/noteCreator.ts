@@ -118,6 +118,11 @@ export async function criarNotaItem(
 		campos[t(idioma, "propNumeroEdicao")] = item.numeroEdicao;
 	}
 
+	// Toda entrada nova começa com status "não li" e não favoritada - o
+	// usuário ajusta isso depois pelo comando/menu de status de leitura.
+	campos[t(idioma, "propStatusLeitura")] = t(idioma, "statusNaoLi");
+	campos[t(idioma, "propFavorito")] = false;
+
 	const frontmatter = construirFrontmatter(campos);
 	const sinopse = item.sinopse ? `${item.sinopse}\n\n` : "";
 	const conteudo = `${frontmatter}\n${sinopse}## ${t(idioma, "secaoNotas")}\n\n`;

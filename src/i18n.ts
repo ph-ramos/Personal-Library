@@ -82,7 +82,28 @@ type ChaveTraducao =
 	| "scannerTitulo"
 	| "scannerInstrucao"
 	| "scannerErroCamera"
-	| "scannerSemCamera";
+	| "scannerSemCamera"
+	| "propNota"
+	| "propStatusLeitura"
+	| "propDataInicioLeitura"
+	| "propDataFimLeitura"
+	| "propDataReleituraPrefixo"
+	| "propFavorito"
+	| "statusNaoLi"
+	| "statusQueroLer"
+	| "statusLendo"
+	| "statusJaLi"
+	| "statusRelendo"
+	| "comandoAtualizarStatusNome"
+	| "statusModalTitulo"
+	| "statusModalCampoStatus"
+	| "statusModalCampoNota"
+	| "statusModalOpcaoSemNota"
+	| "statusModalCampoFavorito"
+	| "statusModalBotaoSalvar"
+	| "statusModalSemArquivo"
+	| "statusModalSucesso"
+	| "baseViewGeral";
 
 const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 	pt: {
@@ -168,6 +189,27 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		scannerInstrucao: "Aponte a câmera para o código de barras (ISBN) do livro ou quadrinho.",
 		scannerErroCamera: "Não foi possível acessar a câmera. Verifique as permissões do dispositivo.",
 		scannerSemCamera: "Nenhuma câmera foi encontrada neste dispositivo.",
+		propNota: "Nota",
+		propStatusLeitura: "Status_leitura",
+		propDataInicioLeitura: "Data_inicio_leitura",
+		propDataFimLeitura: "Data_fim_leitura",
+		propDataReleituraPrefixo: "Data_releitura",
+		propFavorito: "Favorito",
+		statusNaoLi: "Não li",
+		statusQueroLer: "Quero ler",
+		statusLendo: "Lendo",
+		statusJaLi: "Já li",
+		statusRelendo: "Relendo",
+		comandoAtualizarStatusNome: "Atualizar status de leitura do item aberto",
+		statusModalTitulo: "Status de leitura",
+		statusModalCampoStatus: "Status",
+		statusModalCampoNota: "Nota (1 a 5)",
+		statusModalOpcaoSemNota: "Sem nota",
+		statusModalCampoFavorito: "Favorito",
+		statusModalBotaoSalvar: "Salvar",
+		statusModalSemArquivo: "Abra a nota de um livro ou quadrinho da coleção primeiro.",
+		statusModalSucesso: "Status atualizado.",
+		baseViewGeral: "Visão geral",
 	},
 	en: {
 		ribbonTooltip: "Add to collection",
@@ -252,6 +294,27 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		scannerInstrucao: "Point the camera at the book/comic's barcode (ISBN).",
 		scannerErroCamera: "Couldn't access the camera. Check your device's permissions.",
 		scannerSemCamera: "No camera was found on this device.",
+		propNota: "Rating",
+		propStatusLeitura: "Reading_status",
+		propDataInicioLeitura: "Reading_start_date",
+		propDataFimLeitura: "Reading_end_date",
+		propDataReleituraPrefixo: "Reread_date",
+		propFavorito: "Favorite",
+		statusNaoLi: "Not read",
+		statusQueroLer: "Want to read",
+		statusLendo: "Reading",
+		statusJaLi: "Read",
+		statusRelendo: "Rereading",
+		comandoAtualizarStatusNome: "Update reading status of the open item",
+		statusModalTitulo: "Reading status",
+		statusModalCampoStatus: "Status",
+		statusModalCampoNota: "Rating (1 to 5)",
+		statusModalOpcaoSemNota: "No rating",
+		statusModalCampoFavorito: "Favorite",
+		statusModalBotaoSalvar: "Save",
+		statusModalSemArquivo: "Open a book or comic note from the collection first.",
+		statusModalSucesso: "Status updated.",
+		baseViewGeral: "Overview",
 	},
 	zh: {
 		ribbonTooltip: "添加到收藏",
@@ -336,6 +399,27 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		scannerInstrucao: "将摄像头对准书籍/漫画的条形码(ISBN)。",
 		scannerErroCamera: "无法访问摄像头。请检查设备权限。",
 		scannerSemCamera: "此设备未找到摄像头。",
+		propNota: "评分",
+		propStatusLeitura: "阅读状态",
+		propDataInicioLeitura: "开始阅读日期",
+		propDataFimLeitura: "完成阅读日期",
+		propDataReleituraPrefixo: "重读日期",
+		propFavorito: "收藏",
+		statusNaoLi: "未读",
+		statusQueroLer: "想读",
+		statusLendo: "在读",
+		statusJaLi: "已读",
+		statusRelendo: "重读",
+		comandoAtualizarStatusNome: "更新当前条目的阅读状态",
+		statusModalTitulo: "阅读状态",
+		statusModalCampoStatus: "状态",
+		statusModalCampoNota: "评分(1至5)",
+		statusModalOpcaoSemNota: "无评分",
+		statusModalCampoFavorito: "收藏",
+		statusModalBotaoSalvar: "保存",
+		statusModalSemArquivo: "请先打开收藏中的一本书或漫画的笔记。",
+		statusModalSucesso: "状态已更新。",
+		baseViewGeral: "总览",
 	},
 };
 

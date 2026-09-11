@@ -3,6 +3,7 @@ import { ColecaoSettings, CONFIGURACOES_PADRAO } from "./types";
 import { ColecaoSettingTab } from "./settingsTab";
 import { ModalBusca } from "./searchModal";
 import { garantirArquivoBase } from "./baseFileManager";
+import { abrirModalStatusLeitura } from "./statusLeituraModal";
 import { obterPastaColecao } from "./pastas";
 import { t } from "./i18n";
 
@@ -34,6 +35,24 @@ export default class ColecaoPlugin extends Plugin {
 				}
 			},
 		});
+
+		this.addCommand({
+			id: "atualizar-status-leitura",
+			name: t(idioma, "comandoAtualizarStatusNome"),
+			callback: () => abrirModalStatusLeitura(this.app, this.settings, this.app.workspace.getActiveFile()),
+		});
+
+		this.registerEvent(
+			this.app.workspace.on("file-menu", (menu, file) => {
+				if (!(file instanceof TFile) || file.extension !== "md") return;
+				menu.addItem((item) =>
+					item
+						.setTitle(t(this.settings.idioma, "comandoAtualizarStatusNome"))
+						.setIcon("book-check")
+						.onClick(() => abrirModalStatusLeitura(this.app, this.settings, file))
+				);
+			})
+		);
 
 		this.addSettingTab(new ColecaoSettingTab(this.app, this));
 	}

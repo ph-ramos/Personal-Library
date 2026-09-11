@@ -2,16 +2,19 @@ import { App, normalizePath } from "obsidian";
 import { Idioma, t } from "./i18n";
 
 /**
- * Garante que exista um arquivo .base com a visão geral da coleção
- * (Livros, Quadrinhos e Todos). Só cria se ainda não existir - não sobrescreve
- * customizações que o usuário tenha feito manualmente depois.
+ * Garante que exista um arquivo .base com a visão geral da coleção (Visão
+ * geral em cards, Livros, Quadrinhos e Todos em tabela). Só cria se ainda
+ * não existir - não sobrescreve customizações que o usuário tenha feito
+ * manualmente depois.
  * Os nomes de propriedade e os valores de filtro usados aqui seguem o idioma
  * selecionado no momento em que o arquivo é criado.
  *
- * Observação: a propriedade de imagem da view "cards" (qual campo usar como
- * capa) precisa ser configurada uma vez pela interface do Obsidian (ícone de
- * engrenagem da view -> Image property), porque a chave YAML exata pode
- * variar entre versões do Bases e é mais seguro configurar pela UI.
+ * A capa de cada card já vem configurada via "imageProperty" na própria
+ * definição da view (não precisa mais configurar manualmente pela UI). O
+ * destaque de favoritos usa uma fórmula que mostra uma estrela quando a
+ * propriedade de favorito é verdadeira - a reordenação dos cards (por
+ * título, nota, status etc.) é feita pelo próprio Bases, direto na barra da
+ * view.
  */
 export async function garantirArquivoBase(app: App, pastaColecao: string, idioma: Idioma = "pt"): Promise<string> {
 	const caminho = normalizePath(`${pastaColecao}/Colecao.base`);
@@ -20,9 +23,14 @@ export async function garantirArquivoBase(app: App, pastaColecao: string, idioma
 	}
 
 	const propTipo = t(idioma, "propTipo");
+	const propTitulo = t(idioma, "propTitulo");
 	const propEditora = t(idioma, "propEditora");
 	const propAno = t(idioma, "propAnoPublicacao");
 	const propPaginas = t(idioma, "propPaginas");
+	const propCapa = t(idioma, "propCapa");
+	const propStatus = t(idioma, "propStatusLeitura");
+	const propNota = t(idioma, "propNota");
+	const propFavorito = t(idioma, "propFavorito");
 	const valorLivro = t(idioma, "tipoLivro");
 	const valorQuadrinho = t(idioma, "tipoQuadrinho");
 
@@ -30,22 +38,52 @@ export async function garantirArquivoBase(app: App, pastaColecao: string, idioma
   and:
     - 'file.inFolder("${pastaColecao}")'
 
+formulas:
+  destaque: 'if(${propFavorito}, "⭐", "")'
+
+properties:
+  formula.destaque:
+    displayName: "${propFavorito}"
+
 views:
+  - type: cards
+    name: "${t(idioma, "baseViewGeral")}"
+    imageProperty: ${propCapa}
+    imageFit: cover
+    order:
+      - ${propTitulo}
+      - ${propStatus}
+      - formula.destaque
   - type: cards
     name: "${t(idioma, "baseViewLivros")}"
     filters:
       and:
         - '${propTipo} == "${valorLivro}"'
+    imageProperty: ${propCapa}
+    imageFit: cover
+    order:
+      - ${propTitulo}
+      - ${propStatus}
+      - formula.destaque
   - type: cards
     name: "${t(idioma, "baseViewQuadrinhos")}"
     filters:
       and:
         - '${propTipo} == "${valorQuadrinho}"'
+    imageProperty: ${propCapa}
+    imageFit: cover
+    order:
+      - ${propTitulo}
+      - ${propStatus}
+      - formula.destaque
   - type: table
     name: "${t(idioma, "baseViewTodos")}"
     order:
       - file.name
       - ${propTipo}
+      - ${propStatus}
+      - ${propNota}
+      - ${propFavorito}
       - ${propEditora}
       - ${propAno}
       - ${propPaginas}
