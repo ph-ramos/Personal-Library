@@ -1,8 +1,8 @@
 {
   "name": "colecao-livros-quadrinhos",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
-  "description": "Plugin Obsidian para catalogar livros e quadrinhos por ISBN/t\u00edtulo, com metadados, capa e vis\u00e3o geral via Bases.",
+  "description": "Plugin Obsidian para catalogar livros e quadrinhos por ISBN/título, com metadados, capa e visão geral via Bases.",
   "main": "main.js",
   "author": "Pedro Henrique Ramos",
   "license": "MIT",

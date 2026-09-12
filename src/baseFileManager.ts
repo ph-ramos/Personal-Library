@@ -10,7 +10,7 @@ import { Idioma, t } from "./i18n";
  * regenerado. Se o usuário customizar o arquivo manualmente mantendo o
  * marcador, a customização é respeitada e não é sobrescrita.
  */
-const VERSAO_SCHEMA = 2;
+const VERSAO_SCHEMA = 3;
 const MARCADOR = `# gerado por colecao-livros-quadrinhos - schema v${VERSAO_SCHEMA} (edite à vontade; remova esta linha para impedir atualizações automáticas de schema)`;
 
 /**
@@ -22,13 +22,21 @@ const MARCADOR = `# gerado por colecao-livros-quadrinhos - schema v${VERSAO_SCHE
  * Os nomes de propriedade e os valores de filtro usados aqui seguem o idioma
  * selecionado no momento em que o arquivo é criado.
  *
- * A capa de cada card vem configurada via a chave "image" na própria
- * definição da view (chave confirmada com exemplos reais de usuários no
- * fórum do Obsidian - "imageProperty" NÃO é uma chave válida do Bases). O
- * destaque de favoritos usa uma fórmula que mostra uma estrela quando a
- * propriedade de favorito é verdadeira - a reordenação dos cards (por
- * título, nota, status etc.) é feita pelo próprio Bases, direto na barra da
- * view.
+ * Notas sobre chaves do Bases usadas aqui (confirmadas via exemplos reais
+ * de usuários no fórum do Obsidian, já que a documentação oficial não lista
+ * os nomes literais das chaves de YAML):
+ * - "image": chave correta para a capa de cada card ("imageProperty" NÃO
+ *   existe, apesar do rótulo "Image property" na UI).
+ * - "imageFit: contain": faz a capa inteira aparecer sem cortes, ajustada
+ *   ao espaço do card (o padrão do Bases, "cover", cortaria a imagem para
+ *   preencher o card por completo).
+ * - "file.ext == \"md\"" no filtro: sem isso, os arquivos de imagem da capa
+ *   (salvos na mesma pasta da coleção) também apareceriam como itens nas
+ *   views, já que o filtro de pasta sozinho não distingue notas de anexos.
+ * - A fórmula de destaque usa a forma de 2 argumentos de if() (se não for
+ *   favorito, se resolve a "null"), para que o Bases não desenhe nenhuma
+ *   marcação no card - só aparece a estrela quando o item é favorito, sem
+ *   nenhuma indicação para quem não é.
  */
 export async function garantirArquivoBase(app: App, pastaColecao: string, idioma: Idioma = "pt"): Promise<string> {
 	const caminho = normalizePath(`${pastaColecao}/Colecao.base`);
@@ -57,9 +65,10 @@ export async function garantirArquivoBase(app: App, pastaColecao: string, idioma
 filters:
   and:
     - 'file.inFolder("${pastaColecao}")'
+    - 'file.ext == "md"'
 
 formulas:
-  destaque: 'if(${propFavorito}, "⭐", "")'
+  destaque: 'if(${propFavorito}, "⭐")'
 
 properties:
   formula.destaque:
@@ -69,6 +78,7 @@ views:
   - type: cards
     name: "${t(idioma, "baseViewGeral")}"
     image: ${propCapa}
+    imageFit: contain
     order:
       - ${propTitulo}
       - ${propStatus}
@@ -79,6 +89,7 @@ views:
       and:
         - '${propTipo} == "${valorLivro}"'
     image: ${propCapa}
+    imageFit: contain
     order:
       - ${propTitulo}
       - ${propStatus}
@@ -89,6 +100,7 @@ views:
       and:
         - '${propTipo} == "${valorQuadrinho}"'
     image: ${propCapa}
+    imageFit: contain
     order:
       - ${propTitulo}
       - ${propStatus}

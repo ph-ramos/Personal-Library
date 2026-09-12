@@ -5,11 +5,14 @@ Plugin para [Obsidian](https://obsidian.md) que cataloga livros e quadrinhos dir
 ## Funcionalidades
 
 - **Busca por ISBN ou título**, cruzando [Google Books](https://developers.google.com/books) e [Open Library](https://openlibrary.org/developers/api) — o que faltar em uma fonte é complementado pela outra.
+- **Leitura de código de barras pela câmera do dispositivo**, para pegar o ISBN direto do livro/quadrinho físico sem digitar nada.
 - **Livros e quadrinhos como tipos separados**, com campos próprios (autor/tradutor/edição para livros; equipe autoral/série/número para quadrinhos).
 - **Cadastro manual** como alternativa, para quando a busca automática não encontra nada — comum em edições de editoras nacionais menores.
 - **Completa automaticamente o ISBN-10/13** quando você só informa um dos dois, através da conversão matemática padrão entre os formatos.
 - **Capa baixada localmente** para o vault e vinculada à nota.
-- **Visão geral da coleção** usando a feature nativa [Bases](https://help.obsidian.md/bases) do Obsidian (views em galeria com capa, separadas por tipo).
+- **Status de leitura** (não li, quero ler, lendo, já li, relendo), com data de início/fim de leitura preenchida automaticamente e uma propriedade numerada por releitura.
+- **Nota de 0,5 a 5 estrelas** e marcação de **favorito**.
+- **Visão geral da coleção** usando a feature nativa [Bases](https://help.obsidian.md/bases) do Obsidian (views em cards com capa, separadas por tipo, além de uma tabela com todos os itens).
 - **Interface em Português, English ou 中文** — e as propriedades das notas criadas a partir daí seguem o idioma selecionado.
 
 ## Instalação
@@ -22,8 +25,13 @@ Este plugin ainda não está na lista oficial de plugins da comunidade do Obsidi
 
 ## Uso
 
-- Comando **"Adicionar livro ou quadrinho à coleção"** (ou o ícone na barra lateral) abre a busca.
-- Comando **"Criar/abrir visão geral da coleção (.base)"** gera o arquivo de visão geral (Bases). Na primeira vez, configure manualmente a "Image property" de cada view Cards para `Capa` (ou o nome equivalente no idioma escolhido) pelo ícone de engrenagem da view — a chave exata dessa configuração ainda não é totalmente padronizada entre versões do Bases, por isso esse passo é manual.
+- Ícone **"Adicionar à coleção"** na barra lateral (ou o comando equivalente) abre a busca — pelo campo de texto ou pelo ícone de câmera, para escanear o código de barras.
+- Ícone **de estrela** na barra lateral (ou o comando "Atualizar status de leitura", disponível também no menu de contexto da nota) abre o status de leitura, nota e favorito do item aberto.
+- Ícone **de grade** na barra lateral (ou o comando "Criar/abrir visão geral da coleção") abre a visão geral em Bases — gerada automaticamente na primeira vez que o plugin é ativado, sem nenhuma configuração manual.
+
+### Sobre a permissão de câmera
+
+A leitura de código de barras usa a câmera do dispositivo só enquanto a janela de escaneamento estiver aberta — nenhuma imagem ou vídeo é salvo ou enviado para fora do seu computador. Na primeira vez, o sistema operacional (ou o navegador, no caso do Obsidian mobile/web) pede sua permissão explícita; se você negar ou fechar a janela, o plugin simplesmente não consegue escanear e pede para tentar de novo ou digitar o ISBN manualmente.
 
 ## Configurações
 
