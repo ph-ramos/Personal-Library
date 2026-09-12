@@ -22,6 +22,10 @@ export default class ColecaoPlugin extends Plugin {
 			abrirModalStatusLeitura(this.app, this.settings, this.app.workspace.getActiveFile());
 		});
 
+		this.addRibbonIcon("layout-grid", t(idioma, "comandoBaseNome"), () => {
+			void this.abrirOuCriarVisaoGeral();
+		});
+
 		this.addCommand({
 			id: "adicionar-item-colecao",
 			name: t(idioma, "comandoAdicionarNome"),
@@ -31,13 +35,7 @@ export default class ColecaoPlugin extends Plugin {
 		this.addCommand({
 			id: "criar-visao-geral-colecao",
 			name: t(idioma, "comandoBaseNome"),
-			callback: async () => {
-				const caminho = await garantirArquivoBase(this.app, obterPastaColecao(this.settings), this.settings.idioma);
-				const arquivo = this.app.vault.getAbstractFileByPath(caminho);
-				if (arquivo instanceof TFile) {
-					await this.app.workspace.getLeaf(false).openFile(arquivo);
-				}
-			},
+			callback: () => this.abrirOuCriarVisaoGeral(),
 		});
 
 		this.addCommand({
@@ -80,6 +78,19 @@ export default class ColecaoPlugin extends Plugin {
 				console.error("[Colecao] Erro ao criar visão geral padrão:", e)
 			);
 		});
+	}
+
+	/**
+	 * Garante que o arquivo .base de visão geral exista (criando-o se
+	 * necessário) e o abre numa nova aba. Usado tanto pelo comando quanto
+	 * pelo ícone da barra lateral.
+	 */
+	private async abrirOuCriarVisaoGeral(): Promise<void> {
+		const caminho = await garantirArquivoBase(this.app, obterPastaColecao(this.settings), this.settings.idioma);
+		const arquivo = this.app.vault.getAbstractFileByPath(caminho);
+		if (arquivo instanceof TFile) {
+			await this.app.workspace.getLeaf(false).openFile(arquivo);
+		}
 	}
 
 	async loadSettings() {
