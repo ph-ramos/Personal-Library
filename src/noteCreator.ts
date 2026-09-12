@@ -70,10 +70,10 @@ export async function baixarCapa(
 }
 
 /**
- * Cria a nota markdown do item na pasta da coleção. Tanto os NOMES das
- * propriedades quanto o VALOR do campo de tipo (livro/quadrinho) são escritos
- * no idioma selecionado nas configurações do plugin - itens já existentes,
- * criados com outro idioma, não são retroativamente alterados.
+ * Cria a nota markdown do item na pasta de livros/quadrinhos. Tanto os NOMES
+ * das propriedades quanto o VALOR do campo de tipo (livro/quadrinho) são
+ * escritos no idioma selecionado nas configurações do plugin - itens já
+ * existentes, criados com outro idioma, não são retroativamente alterados.
  * `nomeArquivo` já deve vir resolvido (único) por resolverNomeArquivoUnico.
  * Se apenas um dos ISBNs (10 ou 13) foi informado, o outro é derivado
  * automaticamente por conversão matemática padrão.
@@ -81,14 +81,14 @@ export async function baixarCapa(
 export async function criarNotaItem(
 	app: App,
 	item: ItemColecao,
-	pastaColecao: string,
+	pastaLivros: string,
 	nomeArquivo: string,
 	idioma: Idioma,
 	caminhoCapa?: string
 ): Promise<TFile> {
-	await garantirPasta(app, pastaColecao);
+	await garantirPasta(app, pastaLivros);
 
-	const caminhoNota = normalizePath(`${pastaColecao}/${nomeArquivo}.md`);
+	const caminhoNota = normalizePath(`${pastaLivros}/${nomeArquivo}.md`);
 	const { isbn10, isbn13 } = completarIsbns(item.isbn10, item.isbn13);
 	const tipoTraduzido = t(idioma, item.tipo === "livro" ? "tipoLivro" : "tipoQuadrinho");
 

@@ -41,15 +41,23 @@ export type StatusLeitura = "naoLi" | "queroLer" | "lendo" | "jaLi" | "relendo";
 export interface ColecaoSettings {
 	pastaColecao: string;
 	pastaCapas: string;
+	pastaLivros: string;
 	googleApiKey: string;
 	idioma: Idioma;
+	/** Controla se a migração automática de pastas (renomeação da pasta
+	 * principal e criação da subpasta dedicada às notas) já foi feita neste
+	 * vault - veja migracao.ts. Roda uma única vez. */
+	migracaoV3Feita: boolean;
 }
 
-// Deixar pastaColecao/pastaCapas em branco faz o plugin usar o nome padrão do
-// idioma atual (veja pastas.ts) - assim as pastas acompanham a troca de idioma.
+// Deixar pastaColecao/pastaCapas/pastaLivros em branco faz o plugin usar o
+// nome padrão do idioma atual (veja pastas.ts) - assim as pastas acompanham
+// a troca de idioma.
 export const CONFIGURACOES_PADRAO: ColecaoSettings = {
 	pastaColecao: "",
 	pastaCapas: "",
+	pastaLivros: "",
 	googleApiKey: "",
 	idioma: "pt",
+	migracaoV3Feita: false,
 };

@@ -4,7 +4,8 @@ import { ColecaoSettingTab } from "./settingsTab";
 import { ModalBusca } from "./searchModal";
 import { garantirArquivoBase } from "./baseFileManager";
 import { abrirModalStatusLeitura } from "./statusLeituraModal";
-import { obterPastaColecao } from "./pastas";
+import { obterPastaColecao, obterPastaLivros } from "./pastas";
+import { migrarEstruturaDePastas } from "./migracao";
 import { t } from "./i18n";
 
 export default class ColecaoPlugin extends Plugin {
@@ -71,12 +72,24 @@ export default class ColecaoPlugin extends Plugin {
 
 		this.addSettingTab(new ColecaoSettingTab(this.app, this));
 
-		// Garante a visão geral (.base) já na primeira ativação do plugin,
-		// sem precisar que o usuário rode o comando manualmente.
+		// Antes de garantir a visão geral (.base), migra (uma única vez) a
+		// estrutura de pastas de versões anteriores do plugin para o novo
+		// layout - pasta principal renomeada e notas numa subpasta dedicada
+		// (veja migracao.ts) - e só então cria/abre o .base já com o nome e
+		// os filtros atualizados, sem precisar que o usuário rode o comando
+		// manualmente.
 		this.app.workspace.onLayoutReady(() => {
-			void garantirArquivoBase(this.app, obterPastaColecao(this.settings), this.settings.idioma).catch((e) =>
-				console.error("[Colecao] Erro ao criar visão geral padrão:", e)
-			);
+			void migrarEstruturaDePastas(this.app, this.settings)
+				.then(() => this.saveSettings())
+				.then(() =>
+					garantirArquivoBase(
+						this.app,
+						obterPastaColecao(this.settings),
+						obterPastaLivros(this.settings),
+						this.settings.idioma
+					)
+				)
+				.catch((e) => console.error("[Colecao] Erro ao criar visão geral padrão:", e));
 		});
 	}
 
@@ -86,7 +99,12 @@ export default class ColecaoPlugin extends Plugin {
 	 * pelo ícone da barra lateral.
 	 */
 	private async abrirOuCriarVisaoGeral(): Promise<void> {
-		const caminho = await garantirArquivoBase(this.app, obterPastaColecao(this.settings), this.settings.idioma);
+		const caminho = await garantirArquivoBase(
+			this.app,
+			obterPastaColecao(this.settings),
+			obterPastaLivros(this.settings),
+			this.settings.idioma
+		);
 		const arquivo = this.app.vault.getAbstractFileByPath(caminho);
 		if (arquivo instanceof TFile) {
 			await this.app.workspace.getLeaf(false).openFile(arquivo);

@@ -1,7 +1,7 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import type ColecaoPlugin from "./main";
 import { Idioma, t } from "./i18n";
-import { obterPastaCapas, obterPastaColecao } from "./pastas";
+import { obterPastaCapas, obterPastaColecao, obterPastaLivros } from "./pastas";
 
 export class ColecaoSettingTab extends PluginSettingTab {
 	constructor(app: App, private plugin: ColecaoPlugin) {
@@ -23,6 +23,19 @@ export class ColecaoSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.pastaColecao)
 					.onChange(async (v) => {
 						this.plugin.settings.pastaColecao = v.trim();
+						await this.plugin.saveSettings();
+					})
+			);
+
+		new Setting(containerEl)
+			.setName(t(idioma, "configPastaLivrosNome"))
+			.setDesc(t(idioma, "configPastaLivrosDesc"))
+			.addText((text) =>
+				text
+					.setPlaceholder(obterPastaLivros(this.plugin.settings))
+					.setValue(this.plugin.settings.pastaLivros)
+					.onChange(async (v) => {
+						this.plugin.settings.pastaLivros = v.trim();
 						await this.plugin.saveSettings();
 					})
 			);

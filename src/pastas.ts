@@ -21,3 +21,16 @@ export function obterPastaCapas(settings: ColecaoSettings): string {
 	if (customizada) return customizada;
 	return `${obterPastaColecao(settings)}/${t(settings.idioma, "pastaCapasSubpasta")}`;
 }
+
+/**
+ * Pasta das notas de livros/quadrinhos efetivamente em uso: o valor
+ * customizado pelo usuário, ou (se estiver em branco) uma subpasta com nome
+ * padrão no idioma atual, dentro da pasta da coleção - do mesmo jeito que a
+ * pasta das capas. Assim a pasta principal fica só com as subpastas (notas e
+ * capas) e o arquivo .base, sem notas soltas na raiz.
+ */
+export function obterPastaLivros(settings: ColecaoSettings): string {
+	const customizada = settings.pastaLivros.trim();
+	if (customizada) return customizada;
+	return `${obterPastaColecao(settings)}/${t(settings.idioma, "pastaLivrosSubpasta")}`;
+}

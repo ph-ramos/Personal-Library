@@ -9,6 +9,8 @@ type ChaveTraducao =
 	| "configPastaColecaoDesc"
 	| "configPastaCapasNome"
 	| "configPastaCapasDesc"
+	| "configPastaLivrosNome"
+	| "configPastaLivrosDesc"
 	| "configApiKeyNome"
 	| "configApiKeyDesc"
 	| "configIdiomaNome"
@@ -79,6 +81,8 @@ type ChaveTraducao =
 	| "propNumeroEdicao"
 	| "pastaColecaoPadrao"
 	| "pastaCapasSubpasta"
+	| "pastaLivrosSubpasta"
+	| "arquivoBaseNome"
 	| "scannerTitulo"
 	| "scannerInstrucao"
 	| "scannerErroCamera"
@@ -113,9 +117,11 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		comandoBaseNome: "Criar/abrir visão geral da coleção (.base)",
 		configTitulo: "Coleção de Livros e Quadrinhos",
 		configPastaColecaoNome: "Pasta da coleção",
-		configPastaColecaoDesc: "Onde as notas de cada livro/quadrinho serão criadas.",
+		configPastaColecaoDesc: "Pasta principal da coleção, dentro da qual ficam as subpastas de notas e de capas.",
 		configPastaCapasNome: "Pasta das capas",
 		configPastaCapasDesc: "Onde as imagens de capa baixadas serão salvas.",
+		configPastaLivrosNome: "Pasta dos livros e quadrinhos",
+		configPastaLivrosDesc: "Subpasta (dentro da pasta da coleção) onde as notas de cada livro/quadrinho serão criadas.",
 		configApiKeyNome: "Chave de API do Google Books (opcional)",
 		configApiKeyDesc: "Aumenta o limite de requisições por dia. Sem ela, o plugin já funciona normalmente.",
 		configIdiomaNome: "Idioma da interface",
@@ -184,8 +190,10 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propEquipeAutoral: "Equipe autoral",
 		propSerie: "Serie",
 		propNumeroEdicao: "Numero_edicao",
-		pastaColecaoPadrao: "Colecao",
+		pastaColecaoPadrao: "Biblioteca",
 		pastaCapasSubpasta: "_Capas",
+		pastaLivrosSubpasta: "_Livros e Quadrinhos",
+		arquivoBaseNome: "Estante",
 		scannerTitulo: "Escanear código de barras",
 		scannerInstrucao: "Aponte a câmera para o código de barras (ISBN) do livro ou quadrinho.",
 		scannerErroCamera: "Não foi possível acessar a câmera. Verifique as permissões do dispositivo.",
@@ -219,9 +227,11 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		comandoBaseNome: "Create/open collection overview (.base)",
 		configTitulo: "Book & Comic Collection",
 		configPastaColecaoNome: "Collection folder",
-		configPastaColecaoDesc: "Where each book/comic note will be created.",
+		configPastaColecaoDesc: "Main collection folder, containing the notes and cover subfolders.",
 		configPastaCapasNome: "Cover folder",
 		configPastaCapasDesc: "Where downloaded cover images will be saved.",
+		configPastaLivrosNome: "Books and comics folder",
+		configPastaLivrosDesc: "Subfolder (inside the collection folder) where each book/comic note will be created.",
 		configApiKeyNome: "Google Books API key (optional)",
 		configApiKeyDesc: "Raises the daily request limit. The plugin works fine without it.",
 		configIdiomaNome: "Interface language",
@@ -290,8 +300,10 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propEquipeAutoral: "Creative team",
 		propSerie: "Series",
 		propNumeroEdicao: "Issue_number",
-		pastaColecaoPadrao: "Collection",
+		pastaColecaoPadrao: "Library",
 		pastaCapasSubpasta: "_Covers",
+		pastaLivrosSubpasta: "_Books and Comics",
+		arquivoBaseNome: "Shelf",
 		scannerTitulo: "Scan barcode",
 		scannerInstrucao: "Point the camera at the book/comic's barcode (ISBN).",
 		scannerErroCamera: "Couldn't access the camera. Check your device's permissions.",
@@ -325,9 +337,11 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		comandoBaseNome: "创建/打开收藏概览 (.base)",
 		configTitulo: "图书与漫画收藏",
 		configPastaColecaoNome: "收藏文件夹",
-		configPastaColecaoDesc: "每本书/漫画的笔记将创建在这里。",
+		configPastaColecaoDesc: "收藏的主文件夹,笔记和封面子文件夹都在它里面。",
 		configPastaCapasNome: "封面文件夹",
 		configPastaCapasDesc: "下载的封面图片将保存在这里。",
+		configPastaLivrosNome: "图书与漫画文件夹",
+		configPastaLivrosDesc: "收藏文件夹内的子文件夹,每本书/漫画的笔记将创建在这里。",
 		configApiKeyNome: "Google Books API 密钥(可选)",
 		configApiKeyDesc: "提高每日请求上限。没有它插件也能正常工作。",
 		configIdiomaNome: "界面语言",
@@ -396,8 +410,10 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propEquipeAutoral: "创作团队",
 		propSerie: "系列",
 		propNumeroEdicao: "期号",
-		pastaColecaoPadrao: "收藏",
+		pastaColecaoPadrao: "图书馆",
 		pastaCapasSubpasta: "_封面",
+		pastaLivrosSubpasta: "_书籍和漫画",
+		arquivoBaseNome: "书架",
 		scannerTitulo: "扫描条形码",
 		scannerInstrucao: "将摄像头对准书籍/漫画的条形码(ISBN)。",
 		scannerErroCamera: "无法访问摄像头。请检查设备权限。",

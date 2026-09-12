@@ -4,14 +4,22 @@ import { Idioma, t } from "./i18n";
 /**
  * Marcador de versão do schema do .base gerado automaticamente. Deve ser
  * incrementado sempre que a estrutura gerada abaixo mudar de forma
- * relevante (ex.: chave de imagem corrigida). Se o arquivo existente não
- * começar com o marcador atual, ele é tratado como desatualizado (gerado
- * por uma versão anterior do plugin, com um bug já corrigido) e é
- * regenerado. Se o usuário customizar o arquivo manualmente mantendo o
- * marcador, a customização é respeitada e não é sobrescrita.
+ * relevante (ex.: chave de imagem corrigida, pasta filtrada mudou). Se o
+ * arquivo existente não começar com o marcador atual, ele é tratado como
+ * desatualizado (gerado por uma versão anterior do plugin) e é regenerado.
+ * Se o usuário customizar o arquivo manualmente mantendo o marcador, a
+ * customização é respeitada e não é sobrescrita.
  */
-const VERSAO_SCHEMA = 3;
+const VERSAO_SCHEMA = 4;
 const MARCADOR = `# gerado por colecao-livros-quadrinhos - schema v${VERSAO_SCHEMA} (edite à vontade; remova esta linha para impedir atualizações automáticas de schema)`;
+
+/**
+ * Nome de arquivo usado por versões anteriores do plugin para a visão geral
+ * (sempre "Colecao.base", fixo, independente do idioma). Usado só para
+ * limpar o arquivo antigo quando o novo (com nome traduzido, ex.
+ * "Estante.base") é gerado no lugar dele.
+ */
+const NOME_ARQUIVO_BASE_ANTIGO = "Colecao.base";
 
 /**
  * Garante que exista um arquivo .base com a visão geral da coleção (Visão
@@ -19,8 +27,14 @@ const MARCADOR = `# gerado por colecao-livros-quadrinhos - schema v${VERSAO_SCHE
  * o arquivo não existe ou quando foi gerado por uma versão de schema
  * anterior (veja MARCADOR/VERSAO_SCHEMA acima) - não sobrescreve
  * customizações feitas em cima da versão atual do schema.
- * Os nomes de propriedade e os valores de filtro usados aqui seguem o idioma
- * selecionado no momento em que o arquivo é criado.
+ * Os nomes de propriedade, o nome do próprio arquivo e os valores de filtro
+ * usados aqui seguem o idioma selecionado no momento em que o arquivo é
+ * criado.
+ *
+ * `pastaColecao` é a pasta principal (onde o .base fica); `pastaLivros` é a
+ * subpasta dedicada às notas de livros/quadrinhos (separada da pasta de
+ * capas) - só ela é usada no filtro das views, então os arquivos de capa
+ * nunca aparecem como itens.
  *
  * Notas sobre chaves do Bases usadas aqui (confirmadas via exemplos reais
  * de usuários no fórum do Obsidian, já que a documentação oficial não lista
@@ -30,16 +44,21 @@ const MARCADOR = `# gerado por colecao-livros-quadrinhos - schema v${VERSAO_SCHE
  * - "imageFit: contain": faz a capa inteira aparecer sem cortes, ajustada
  *   ao espaço do card (o padrão do Bases, "cover", cortaria a imagem para
  *   preencher o card por completo).
- * - "file.ext == \"md\"" no filtro: sem isso, os arquivos de imagem da capa
- *   (salvos na mesma pasta da coleção) também apareceriam como itens nas
- *   views, já que o filtro de pasta sozinho não distingue notas de anexos.
+ * - "file.ext == \"md\"" no filtro: mantido como segurança extra, mesmo com
+ *   o filtro já apontando só para a subpasta dedicada às notas.
  * - A fórmula de destaque usa a forma de 2 argumentos de if() (se não for
  *   favorito, se resolve a "null"), para que o Bases não desenhe nenhuma
  *   marcação no card - só aparece a estrela quando o item é favorito, sem
  *   nenhuma indicação para quem não é.
  */
-export async function garantirArquivoBase(app: App, pastaColecao: string, idioma: Idioma = "pt"): Promise<string> {
-	const caminho = normalizePath(`${pastaColecao}/Colecao.base`);
+export async function garantirArquivoBase(
+	app: App,
+	pastaColecao: string,
+	pastaLivros: string,
+	idioma: Idioma = "pt"
+): Promise<string> {
+	const nomeArquivo = t(idioma, "arquivoBaseNome");
+	const caminho = normalizePath(`${pastaColecao}/${nomeArquivo}.base`);
 	const existe = await app.vault.adapter.exists(caminho);
 
 	if (existe) {
@@ -47,6 +66,14 @@ export async function garantirArquivoBase(app: App, pastaColecao: string, idioma
 		if (atual.startsWith(MARCADOR)) {
 			return caminho;
 		}
+	}
+
+	// Limpa o arquivo com o nome antigo (schemas anteriores usavam sempre
+	// "Colecao.base", sem tradução), pra não deixar dois arquivos de visão
+	// geral no vault depois da renomeação.
+	const caminhoAntigo = normalizePath(`${pastaColecao}/${NOME_ARQUIVO_BASE_ANTIGO}`);
+	if (caminhoAntigo !== caminho && (await app.vault.adapter.exists(caminhoAntigo))) {
+		await app.vault.adapter.remove(caminhoAntigo);
 	}
 
 	const propTipo = t(idioma, "propTipo");
@@ -64,7 +91,7 @@ export async function garantirArquivoBase(app: App, pastaColecao: string, idioma
 	const conteudo = `${MARCADOR}
 filters:
   and:
-    - 'file.inFolder("${pastaColecao}")'
+    - 'file.inFolder("${pastaLivros}")'
     - 'file.ext == "md"'
 
 formulas:
