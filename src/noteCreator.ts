@@ -84,7 +84,8 @@ export async function criarNotaItem(
 	pastaLivros: string,
 	nomeArquivo: string,
 	idioma: Idioma,
-	caminhoCapa?: string
+	caminhoCapa?: string,
+	caminhoNotaBiblioteca?: string
 ): Promise<TFile> {
 	await garantirPasta(app, pastaLivros);
 
@@ -106,6 +107,7 @@ export async function criarNotaItem(
 		[t(idioma, "propFonte")]: item.fonte,
 		[t(idioma, "propFonteUrl")]: item.fonteUrl,
 		[t(idioma, "propCapa")]: caminhoCapa ? `[[${caminhoCapa}]]` : (item.capaUrl ?? ""),
+		[t(idioma, "propBiblioteca")]: caminhoNotaBiblioteca ? `[[${caminhoNotaBiblioteca}]]` : undefined,
 	};
 
 	if (item.tipo === "livro") {

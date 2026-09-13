@@ -5,7 +5,8 @@ import { ModalBusca } from "./searchModal";
 import { garantirArquivoBase } from "./baseFileManager";
 import { abrirModalStatusLeitura } from "./statusLeituraModal";
 import { obterPastaColecao, obterPastaLivros } from "./pastas";
-import { migrarEstruturaDePastas } from "./migracao";
+import { migrarEstruturaDePastas, migrarLinksBiblioteca } from "./migracao";
+import { garantirNotaBiblioteca } from "./notaBiblioteca";
 import { t } from "./i18n";
 
 export default class ColecaoPlugin extends Plugin {
@@ -75,11 +76,16 @@ export default class ColecaoPlugin extends Plugin {
 		// Antes de garantir a visão geral (.base), migra (uma única vez) a
 		// estrutura de pastas de versões anteriores do plugin para o novo
 		// layout - pasta principal renomeada e notas numa subpasta dedicada
-		// (veja migracao.ts) - e só então cria/abre o .base já com o nome e
-		// os filtros atualizados, sem precisar que o usuário rode o comando
-		// manualmente.
+		// (veja migracao.ts). Em seguida garante que a nota "hub" da
+		// Biblioteca exista (todo carregamento, sem sobrescrever o conteúdo
+		// se já existir) e faz - uma única vez - a migração que linka a ela
+		// notas já cadastradas antes desse recurso existir. Só então cria/abre
+		// o .base já com o nome e os filtros atualizados, sem precisar que o
+		// usuário rode o comando manualmente.
 		this.app.workspace.onLayoutReady(() => {
 			void migrarEstruturaDePastas(this.app, this.settings)
+				.then(() => garantirNotaBiblioteca(this.app, this.settings))
+				.then(() => migrarLinksBiblioteca(this.app, this.settings))
 				.then(() => this.saveSettings())
 				.then(() =>
 					garantirArquivoBase(

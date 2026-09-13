@@ -79,6 +79,8 @@ type ChaveTraducao =
 	| "propEquipeAutoral"
 	| "propSerie"
 	| "propNumeroEdicao"
+	| "propBiblioteca"
+	| "notaBibliotecaTexto"
 	| "pastaColecaoPadrao"
 	| "pastaCapasSubpasta"
 	| "pastaLivrosSubpasta"
@@ -190,6 +192,8 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propEquipeAutoral: "Equipe autoral",
 		propSerie: "Serie",
 		propNumeroEdicao: "Numero_edicao",
+		propBiblioteca: "Biblioteca",
+		notaBibliotecaTexto: "Nota gerada automaticamente para representar sua coleção como um todo — cada livro e quadrinho cadastrado linka para esta nota, o que permite visualizar a coleção inteira no modo Grafo do Obsidian.",
 		pastaColecaoPadrao: "Biblioteca",
 		pastaCapasSubpasta: "_Capas",
 		pastaLivrosSubpasta: "_Livros e Quadrinhos",
@@ -300,6 +304,8 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propEquipeAutoral: "Creative team",
 		propSerie: "Series",
 		propNumeroEdicao: "Issue_number",
+		propBiblioteca: "Library",
+		notaBibliotecaTexto: "Automatically generated note representing your collection as a whole — every registered book and comic links to this note, letting you visualize the whole collection in Obsidian's Graph view.",
 		pastaColecaoPadrao: "Library",
 		pastaCapasSubpasta: "_Covers",
 		pastaLivrosSubpasta: "_Books and Comics",
@@ -410,6 +416,8 @@ const TRADUCOES: Record<Idioma, Record<ChaveTraducao, string>> = {
 		propEquipeAutoral: "创作团队",
 		propSerie: "系列",
 		propNumeroEdicao: "期号",
+		propBiblioteca: "图书馆",
+		notaBibliotecaTexto: "自动生成的笔记,代表你整个收藏 — 每一本登记的书籍和漫画都会链接到这篇笔记,让你可以在 Obsidian 的关系图谱中看到整个收藏。",
 		pastaColecaoPadrao: "图书馆",
 		pastaCapasSubpasta: "_封面",
 		pastaLivrosSubpasta: "_书籍和漫画",

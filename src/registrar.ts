@@ -2,6 +2,7 @@ import { App, Notice } from "obsidian";
 import { ItemColecao, ColecaoSettings } from "./types";
 import { baixarCapa, criarNotaItem, resolverNomeArquivoUnico } from "./noteCreator";
 import { obterPastaCapas, obterPastaLivros } from "./pastas";
+import { garantirNotaBiblioteca } from "./notaBiblioteca";
 import { t } from "./i18n";
 
 /**
@@ -16,13 +17,14 @@ export async function registrarItem(app: App, settings: ColecaoSettings, item: I
 	const pastaLivros = obterPastaLivros(settings);
 	const pastaCapas = obterPastaCapas(settings);
 	const nomeArquivo = resolverNomeArquivoUnico(app, pastaLivros, item.titulo);
+	const caminhoNotaBiblioteca = await garantirNotaBiblioteca(app, settings);
 
 	let caminhoCapa: string | undefined;
 	if (item.capaUrl) {
 		caminhoCapa = await baixarCapa(app, item.capaUrl, pastaCapas, nomeArquivo);
 	}
 	try {
-		const nota = await criarNotaItem(app, item, pastaLivros, nomeArquivo, idioma, caminhoCapa);
+		const nota = await criarNotaItem(app, item, pastaLivros, nomeArquivo, idioma, caminhoCapa, caminhoNotaBiblioteca);
 		new Notice(`"${item.titulo}" ${t(idioma, "noticeAdicionado")}`);
 		await app.workspace.getLeaf(false).openFile(nota);
 	} catch (e: unknown) {

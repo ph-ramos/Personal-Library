@@ -13,6 +13,7 @@ Plugin para [Obsidian](https://obsidian.md) que cataloga livros e quadrinhos dir
 - **Status de leitura** (não li, quero ler, lendo, já li, relendo), com data de início/fim de leitura preenchida automaticamente e uma propriedade numerada por releitura.
 - **Nota de 0,5 a 5 estrelas** e marcação de **favorito**.
 - **Visão geral da coleção** usando a feature nativa [Bases](https://help.obsidian.md/bases) do Obsidian (views em cards com capa, separadas por tipo, além de uma tabela com todos os itens).
+- **Nota "Biblioteca" linkada automaticamente** a cada livro/quadrinho cadastrado, permitindo visualizar a coleção inteira conectada no modo Grafo do Obsidian.
 - **Interface em Português, English ou 中文** — e as propriedades das notas criadas a partir daí seguem o idioma selecionado.
 
 ## Instalação
@@ -37,7 +38,8 @@ A leitura de código de barras usa a câmera do dispositivo só enquanto a janel
 
 | Opção | Descrição |
 |---|---|
-| Pasta da coleção | Onde as notas são criadas. Em branco, segue o padrão do idioma selecionado. |
+| Pasta da coleção | Pasta principal (por padrão, "Biblioteca"), dentro da qual ficam as subpastas de notas e de capas. Em branco, segue o padrão do idioma selecionado. |
+| Pasta dos livros e quadrinhos | Subpasta (dentro da pasta da coleção) onde as notas de cada livro/quadrinho são criadas. Em branco, uma subpasta padrão dentro da pasta da coleção. |
 | Pasta das capas | Onde as capas baixadas são salvas. Em branco, uma subpasta dentro da pasta da coleção. |
 | Chave de API do Google Books | Opcional — aumenta o limite de requisições diárias. |
 | Idioma da interface | Português, English ou 中文. Afeta a interface e as propriedades de itens cadastrados a partir da troca. |

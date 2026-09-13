@@ -1,6 +1,7 @@
 import { App, TFile, TFolder, normalizePath } from "obsidian";
 import { ColecaoSettings } from "./types";
-import { obterPastaColecao, obterPastaLivros } from "./pastas";
+import { obterPastaColecao, obterPastaLivros, obterCaminhoNotaBiblioteca } from "./pastas";
+import { t } from "./i18n";
 
 /**
  * Nomes de pasta padrão usados por versões anteriores do plugin, antes da
@@ -69,4 +70,36 @@ export async function migrarEstruturaDePastas(app: App, settings: ColecaoSetting
 	}
 
 	settings.migracaoV3Feita = true;
+}
+
+/**
+ * Migração automática, feita uma única vez por vault (controlada por
+ * settings.migracaoBibliotecaFeita), que adiciona o link para a nota "hub"
+ * da Biblioteca em notas de livros/quadrinhos já existentes (criadas antes
+ * desse recurso existir) que ainda não tenham esse campo - sem sobrescrever
+ * um valor que porventura já exista. Notas criadas a partir de agora já
+ * ganham o link na hora (veja registrar.ts); esta migração cobre só o
+ * catálogo pré-existente. Pressupõe que a nota "hub" já exista (veja
+ * garantirNotaBiblioteca, chamada antes desta no onload do plugin).
+ */
+export async function migrarLinksBiblioteca(app: App, settings: ColecaoSettings): Promise<void> {
+	if (settings.migracaoBibliotecaFeita) return;
+
+	const propBiblioteca = t(settings.idioma, "propBiblioteca");
+	const caminhoNotaBiblioteca = obterCaminhoNotaBiblioteca(settings);
+	const pastaLivros = normalizePath(obterPastaLivros(settings));
+	const pasta = app.vault.getAbstractFileByPath(pastaLivros);
+
+	if (pasta instanceof TFolder) {
+		const notas = pasta.children.filter((f): f is TFile => f instanceof TFile && f.extension === "md");
+		for (const nota of notas) {
+			await app.fileManager.processFrontMatter(nota, (fm) => {
+				if (!fm[propBiblioteca]) {
+					fm[propBiblioteca] = `[[${caminhoNotaBiblioteca}]]`;
+				}
+			});
+		}
+	}
+
+	settings.migracaoBibliotecaFeita = true;
 }

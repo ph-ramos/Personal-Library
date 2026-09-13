@@ -48,6 +48,10 @@ export interface ColecaoSettings {
 	 * principal e criação da subpasta dedicada às notas) já foi feita neste
 	 * vault - veja migracao.ts. Roda uma única vez. */
 	migracaoV3Feita: boolean;
+	/** Controla se a migração automática que adiciona o link para a nota
+	 * "hub" da Biblioteca nas notas de livros/quadrinhos já existentes (veja
+	 * migracao.ts) já foi feita neste vault. Roda uma única vez. */
+	migracaoBibliotecaFeita: boolean;
 }
 
 // Deixar pastaColecao/pastaCapas/pastaLivros em branco faz o plugin usar o
@@ -60,4 +64,5 @@ export const CONFIGURACOES_PADRAO: ColecaoSettings = {
 	googleApiKey: "",
 	idioma: "pt",
 	migracaoV3Feita: false,
+	migracaoBibliotecaFeita: false,
 };

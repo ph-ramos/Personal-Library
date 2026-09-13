@@ -34,3 +34,13 @@ export function obterPastaLivros(settings: ColecaoSettings): string {
 	if (customizada) return customizada;
 	return `${obterPastaColecao(settings)}/${t(settings.idioma, "pastaLivrosSubpasta")}`;
 }
+
+/**
+ * Caminho (sem extensão) da nota "hub" da Biblioteca - a nota central para a
+ * qual toda nota de livro/quadrinho linka, permitindo visualizar a coleção
+ * inteira conectada no modo Grafo do Obsidian. Fica na raiz da pasta da
+ * coleção, com o mesmo nome traduzido usado como padrão da própria pasta.
+ */
+export function obterCaminhoNotaBiblioteca(settings: ColecaoSettings): string {
+	return `${obterPastaColecao(settings)}/${t(settings.idioma, "pastaColecaoPadrao")}`;
+}
