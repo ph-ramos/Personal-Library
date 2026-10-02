@@ -1,7 +1,7 @@
 {
 	"id": "colecao-livros-quadrinhos",
 	"name": "Personal Library",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"minAppVersion": "1.9.3",
 	"description": "Catalog books and comics by ISBN or title, downloading metadata and cover art, with reading status, ratings, favorites, barcode scanning and a Bases-powered collection overview.",
 	"author": "Pedro Henrique",
