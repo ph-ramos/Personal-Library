@@ -1,14 +1,14 @@
 {
-  "name": "colecao-livros-quadrinhos",
-  "version": "0.4.0",
+  "name": "personal-library",
+  "version": "0.4.1",
   "private": true,
-  "description": "Plugin Obsidian para catalogar livros e quadrinhos por ISBN/título, com metadados, capa e visão geral via Bases.",
+  "description": "Plugin Obsidian para catalogar livros e quadrinhos por ISBN/titulo, com metadados, capa, status de leitura e visao geral via Bases.",
   "main": "main.js",
   "author": "Pedro Henrique Ramos",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ph-ramos/Books-and-Comics-Tracker.git"
+    "url": "https://github.com/ph-ramos/Personal-Library.git"
   },
   "scripts": {
     "dev": "node esbuild.config.mjs",
